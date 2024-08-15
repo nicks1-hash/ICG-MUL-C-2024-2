@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dibujo de Figuras con Personalización</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+            margin-top: 20px;
+        }
+        .input-coordenada {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Dibujar Figuras Regulares con Coordenadas</h2>
+
+    <!-- Selección de la figura -->
+    <label for="figura">Selecciona una figura:</label>
+    <select id="figura" name="figura" onchange="mostrarCampos()">
+        <option value="circulo">Círculo</option>
+        <option value="cuadrado">Cuadrado</option>
+        <option value="triangulo">Triángulo</option>
+    </select>
+    <br/><br/>
+
+    <!-- Campos de entrada para coordenadas -->
+    <div id="coordenadas"></div>
+
+    <!-- Controles de estilo -->
+    <div class="input-coordenada">
+        <label for="colorRelleno">Color de la Figura:</label>
+        <input type="color" id="colorRelleno" value="#FF0000"><br/><br/>
+        
+        <label for="colorBorde">Color del Borde:</label>
+        <input type="color" id="colorBorde" value="#000000"><br/><br/>
+
+        <label for="grosorBorde">Grosor del Borde:</label>
+        <input type="number" id="grosorBorde" value="2" min="1" max="10"><br/>
+    </div>
+
+    <button onclick="dibujarFigura()">Dibujar</button>
+
+    <canvas id="miCanvas" width="400" height="400"></canvas>
+    <script src ="figuras2D.js"></script>
+</body>
+</html>
