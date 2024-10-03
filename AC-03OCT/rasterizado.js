@@ -7,7 +7,6 @@ class Punto {
 
 let modoDibujo = 'rasterizada'; // Modo predeterminado
 
-// Función personalizada para generar puntos
 function generarPuntos(n) {
     const puntos = [];
     for (let i = 0; i < n; i++) {
@@ -18,38 +17,35 @@ function generarPuntos(n) {
     return puntos;
 }
 
-// Función personalizada para dibujar los puntos
+// Dibuja la figura en el canvas
 function dibujarPuntos(ctx, puntos) {
-    ctx.fillStyle = 'blue'; // Color de los puntos
-    for (let i = 0; i < puntos.length; i++) { // Reemplazamos forEach con un bucle for
-        const p = puntos[i];
+    // No dibujamos puntos visibles
+    // ctx.fillStyle = 'blue'; // Color de los puntos
+    puntos.forEach(p => {
         ctx.beginPath();
-        ctx.arc(p.x, p.y, 5, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, 0, 0, Math.PI * 2); // Sin radio, no se verá
         ctx.fill();
-    }
+    });
 }
 
-// Función personalizada para dibujar la figura
 function dibujarFigura(ctx, puntos) {
-    ctx.strokeStyle = 'red'; // Color de la figura
+    ctx.strokeStyle = 'black'; // Color del borde
+    ctx.fillStyle = 'none'; // Sin relleno
     ctx.beginPath();
     ctx.moveTo(puntos[0].x, puntos[0].y);
-    for (let i = 1; i < puntos.length; i++) { // Reemplazamos forEach con un bucle for
-        ctx.lineTo(puntos[i].x, puntos[i].y);
-    }
+    puntos.forEach(p => {
+        ctx.lineTo(p.x, p.y);
+    });
     ctx.closePath();
     
-    ctx.fillStyle = 'rgba(255, 0, 0, 0.3)'; // Color de relleno
-    ctx.fill();
-    ctx.stroke();
+    ctx.stroke(); // Solo dibujar el borde
 }
 
-// Función personalizada para calcular la dirección
+// Función para calcular la dirección
 function direccion(p1, p2, p3) {
     return (p2.x - p1.x) * (p3.y - p1.y) - (p2.y - p1.y) * (p3.x - p1.x);
 }
 
-// Función para verificar si la figura es convexa
 function esConvexa(puntos) {
     let signo = null;
     for (let i = 0; i < puntos.length; i++) {
@@ -70,36 +66,20 @@ function esConvexa(puntos) {
     return true; // No hay cambios de signo, es convexa
 }
 
-// Función personalizada para ordenar los puntos en sentido horario
+// Función para ordenar los puntos en sentido horario
 function ordenarPuntosHorario(puntos) {
-    // Calculamos el centroide
-    let sumaX = 0;
-    let sumaY = 0;
-    const numPuntos = puntos.length;
+    const centroide = {
+        x: puntos.reduce((acc, p) => acc + p.x, 0) / puntos.length,
+        y: puntos.reduce((acc, p) => acc + p.y, 0) / puntos.length
+    };
 
-    for (let i = 0; i < numPuntos; i++) {
-        sumaX += puntos[i].x; // Suma de coordenadas x
-        sumaY += puntos[i].y; // Suma de coordenadas y
-    }
-
-    const centroide = new Punto(sumaX / numPuntos, sumaY / numPuntos); // Coordenadas del centroide
-
-    // Ordenar los puntos en sentido horario
-    for (let i = 0; i < puntos.length; i++) {
-        for (let j = i + 1; j < puntos.length; j++) {
-            const anguloA = Math.atan2(puntos[i].y - centroide.y, puntos[i].x - centroide.x);
-            const anguloB = Math.atan2(puntos[j].y - centroide.y, puntos[j].x - centroide.x);
-            if (anguloA > anguloB) {
-                // Intercambiar puntos
-                const temp = puntos[i];
-                puntos[i] = puntos[j];
-                puntos[j] = temp;
-            }
-        }
-    }
+    puntos.sort((a, b) => {
+        const anguloA = Math.atan2(a.y - centroide.y, a.x - centroide.x);
+        const anguloB = Math.atan2(b.y - centroide.y, b.x - centroide.x);
+        return anguloA - anguloB;
+    });
 }
 
-// Manejar el evento de clic en el botón para generar la figura
 document.getElementById('btnGenerar').addEventListener('click', () => {
     const cantidadPuntos = Math.floor(Math.random() * (20 - 3)) + 3; // Entre 3 y 20 puntos
     const puntos = generarPuntos(cantidadPuntos);

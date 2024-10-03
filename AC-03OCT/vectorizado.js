@@ -29,19 +29,18 @@ function dibujarSVG(puntos) {
     const polygon = document.createElementNS(svgNS, "polygon");
     const pointsAttr = puntos.map(p => `${p.x},${p.y}`).join(" ");
     polygon.setAttribute("points", pointsAttr);
-    polygon.setAttribute("fill", "rgba(255, 0, 0, 0.3)"); // Color de relleno
-    polygon.setAttribute("stroke", "red");
+    polygon.setAttribute("fill", "none"); // Sin relleno
+    polygon.setAttribute("stroke", "black"); // Borde negro
     
     svg.appendChild(polygon);
 
-    // Dibujar los puntos en SVG
+    // Dibujar los puntos en SVG (sin color ni relleno)
     for (let i = 0; i < puntos.length; i++) { // Reemplazamos forEach con un bucle for
         const p = puntos[i];
         const circle = document.createElementNS(svgNS, "circle");
         circle.setAttribute("cx", p.x);
         circle.setAttribute("cy", p.y);
-        circle.setAttribute("r", 5);
-        circle.setAttribute("fill", "blue"); // Color de los puntos
+        circle.setAttribute("r", 0); // Sin radio, no se verá
         svg.appendChild(circle);
     }
 
